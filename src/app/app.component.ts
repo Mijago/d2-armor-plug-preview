@@ -163,7 +163,10 @@ export class AppComponent {
     return minA + minB + minC + minD;
   }
 
+  public n= 0;
+
   getProbabilityForTotal(total: number): number {
+    this.n++;
     const pmrrAfiltered = this.plugs_mrr_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
     const pmrrBfiltered = this.plugs_mrr_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
     const pdisAfiltered = this.plugs_dis_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));

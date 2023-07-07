@@ -15,17 +15,18 @@
 
 
   <!-- create a circle for each entry in plugs -->
-  <circle
-    *ngFor="let p of activePlugs; let i = index"
-    [class.active]="p.active"
-    [@changePointColor]="p.active"
-    [attr.cx]="mapPoint(p.plug[0], p.plug[1], p.plug[2]).x"
-    [attr.cy]="mapPoint(p.plug[0], p.plug[1], p.plug[2]).y"
-    [attr.r]="1.5"
-    matTooltip="{{names[0]}}: {{p.plug[0]}} - {{names[1]}}: {{p.plug[1]}} - {{names[2]}}: {{p.plug[2]}}"
-  >
+  <ng-container *ngFor="let p of activePlugs; let i = index">
+    <circle
+      [class.active]="p.active"
+      [@changePointColor]="p.active"
+      [attr.cx]="mapPoint(p.plug[0], p.plug[1], p.plug[2]).x"
+      [attr.cy]="mapPoint(p.plug[0], p.plug[1], p.plug[2]).y"
+      [attr.r]="1.5"
+    >
 
-  </circle>
+    </circle>
+  </ng-container>
+
 
 
   <text x="58" y="5" text-anchor="middle" alignment-baseline="middle" font-size="8" fill="white">

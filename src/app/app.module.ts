@@ -11,13 +11,14 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {VarDirectiveDirective} from "./directive/var-directive.directive";
 
 @NgModule({
   declarations: [
     AppComponent,
     PlugTripletVisualiserComponent,
     PlugCombinationVisualiserComponent,
-
+    VarDirectiveDirective
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
