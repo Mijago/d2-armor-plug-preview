@@ -50,20 +50,23 @@
     </div>
     <div class="config-grp-entry">
       <label id="radio-wartable">
-        <b>War Table Focus and Pit of Heresy.</b>
+        <b>Focused Vendor and Pit of Heresy.</b>
         The first plug must have 15 in the selected stat.
+        Note that PoH is also High Stat.
       </label>
       <br>
 
       <mat-button-toggle-group aria-labelledby="radio-wartable" [(ngModel)]="warTableFocus" (change)="update()">
         <mat-button-toggle [value]="-1">None</mat-button-toggle>
+        <!--
         <mat-button-toggle [value]="0" class="triplet1">Mobility</mat-button-toggle>
         <mat-button-toggle [value]="1" class="triplet1">Resilience</mat-button-toggle>
         <mat-button-toggle [value]="2" class="triplet1">Recovery</mat-button-toggle>
         <mat-button-toggle [value]="3" class="triplet2">Discipline</mat-button-toggle>
         <mat-button-toggle [value]="4" class="triplet2">Intellect</mat-button-toggle>
         <mat-button-toggle [value]="5" class="triplet2">Strength</mat-button-toggle>
-        <mat-button-toggle [value]="6">Any (Pit of Heresy)</mat-button-toggle>
+        -->
+        <mat-button-toggle [value]="6">Any</mat-button-toggle>
       </mat-button-toggle-group>
     </div>
 
