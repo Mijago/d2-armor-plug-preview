@@ -135,6 +135,58 @@ export class AppComponent {
   }
 
 
+  getMinimumTotal(): number {
+    const pmrrAfiltered = this.plugs_mrr_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pmrrBfiltered = this.plugs_mrr_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pdisAfiltered = this.plugs_dis_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pdisBfiltered = this.plugs_dis_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+
+    let minA = Math.min(...pmrrAfiltered);
+    let minB = Math.min(...pmrrBfiltered);
+    let minC = Math.min(...pdisAfiltered);
+    let minD = Math.min(...pdisBfiltered);
+
+    return minA + minB + minC + minD;
+  }
+
+  getMaximumTotal(): number {
+    const pmrrAfiltered = this.plugs_mrr_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pmrrBfiltered = this.plugs_mrr_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pdisAfiltered = this.plugs_dis_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pdisBfiltered = this.plugs_dis_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+
+    let minA = Math.max(...pmrrAfiltered);
+    let minB = Math.max(...pmrrBfiltered);
+    let minC = Math.max(...pdisAfiltered);
+    let minD = Math.max(...pdisBfiltered);
+
+    return minA + minB + minC + minD;
+  }
+
+  getProbabilityForTotal(total: number): number {
+    const pmrrAfiltered = this.plugs_mrr_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pmrrBfiltered = this.plugs_mrr_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pdisAfiltered = this.plugs_dis_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pdisBfiltered = this.plugs_dis_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+
+    let prob = 0;
+
+    for (let i = 0; i < pmrrAfiltered.length; i++) {
+      for (let j = 0; j < pmrrBfiltered.length; j++) {
+        for (let k = 0; k < pdisAfiltered.length; k++) {
+          for (let l = 0; l < pdisBfiltered.length; l++) {
+            if (pmrrAfiltered[i] + pmrrBfiltered[j] + pdisAfiltered[k] + pdisBfiltered[l] >= total) {
+              prob += 1;
+            }
+          }
+        }
+      }
+    }
+    return prob/(pmrrAfiltered.length * pmrrBfiltered.length * pdisAfiltered.length * pdisBfiltered.length);
+  }
+
+
+  //--------------------------------------------------------------------------------------------------------------------
   getMinimumTotalForTriplet(triplet: number): number {
     let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
     if (triplet >= 1) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
@@ -146,6 +198,7 @@ export class AppComponent {
     let minB = Math.min(...pBfiltered);
     return minA + minB;
   }
+
   getMaximumTotalForTriplet(triplet: number): number {
     let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
     if (triplet >= 1) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
@@ -172,12 +225,11 @@ export class AppComponent {
     for (let i = 0; i < pAfiltered.length; i++) {
       for (let j = 0; j < pBfiltered.length; j++) {
         if (pAfiltered[i] + pBfiltered[j] >= value) {
-          prob += 1 / (pAfiltered.length * pBfiltered.length);
+          prob += 1;
         }
       }
     }
-    return prob;
-
+    return prob / (pAfiltered.length * pBfiltered.length);
   }
 
 
@@ -221,12 +273,11 @@ export class AppComponent {
     for (let i = 0; i < pAfiltered.length; i++) {
       for (let j = 0; j < pBfiltered.length; j++) {
         if (pAfiltered[i] + pBfiltered[j] >= value) {
-          prob += 1 / (pAfiltered.length * pBfiltered.length);
+          prob += 1;
         }
       }
     }
-    return prob;
-
+    return prob / (pAfiltered.length * pBfiltered.length);
   }
 
   getStatName(stat: number): string {
