@@ -1,5 +1,8 @@
-import {ChangeDetectionStrategy, Component} from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
 import {Plugs} from "./data/plugs";
+import {
+  PlugStatisticsOverviewComponent
+} from "./components/plug-statistics-overview/plug-statistics-overview.component";
 
 export interface BasicPlugEntry {
   plug: [number, number, number];
@@ -19,7 +22,6 @@ export enum DisableStatus {
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
   plugs_mrr_A: BasicPlugEntry[] = [];
@@ -27,8 +29,10 @@ export class AppComponent {
   plugs_dis_A: BasicPlugEntry[] = [];
   plugs_dis_B: BasicPlugEntry[] = [];
 
+  // get viewchild observationTable which is a PlugStatisticsOverviewComponent
+  @ViewChild('observationTable') observationTable!: PlugStatisticsOverviewComponent;
 
-  constructor() {
+  constructor(public changeRef: ChangeDetectorRef) {
     this.plugs_mrr_A = Plugs.map(plug => {
       return {plug: plug, active: DisableStatus.Enabled,} as BasicPlugEntry
     })
@@ -49,12 +53,13 @@ export class AppComponent {
   filterExoticIntrinsic: -1 | number = -1;
   filterHighStat: number = 0;
   warTableFocus: number = -1;
+  desired_stats: number[] = [2, 2, 2, 2, 2, 2];
 
   filter(type: DisableStatus, targets: BasicPlugEntry[][], ft: (c: BasicPlugEntry) => boolean) {
     for (let target of targets) {
       target
-        .filter(ft)
         .filter(p => p.active === DisableStatus.Enabled)
+        .filter(ft)
         .forEach((p: BasicPlugEntry) => {
           p.active = type;
         });
@@ -68,7 +73,7 @@ export class AppComponent {
     this.plugs_dis_B.forEach((p: BasicPlugEntry) => p.active = DisableStatus.Enabled);
   }
 
-  async update() {
+  update() {
     this.reset_filter();
 
     if (this.filterHighStat == 1) {
@@ -121,6 +126,8 @@ export class AppComponent {
         );
       }
     }
+
+    this.observationTable.trigger();
   }
 
   isGhostModDisabled(ghostMod: number): boolean {
@@ -135,153 +142,49 @@ export class AppComponent {
   }
 
 
-  getMinimumTotal(): number {
-    const pmrrAfiltered = this.plugs_mrr_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pmrrBfiltered = this.plugs_mrr_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pdisAfiltered = this.plugs_dis_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pdisBfiltered = this.plugs_dis_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+  //----------------------------------------------------------------------------------------------------
 
-    let minA = Math.min(...pmrrAfiltered);
-    let minB = Math.min(...pmrrBfiltered);
-    let minC = Math.min(...pdisAfiltered);
-    let minD = Math.min(...pdisBfiltered);
+  public armorStatsEqual = false;
 
-    return minA + minB + minC + minD;
-  }
+  getArmorProbability() {
+    const pmrrAfiltered = this.plugs_mrr_A.filter(p => p.active === DisableStatus.Enabled);
+    const pmrrBfiltered = this.plugs_mrr_B.filter(p => p.active === DisableStatus.Enabled);
+    const pdisAfiltered = this.plugs_dis_A.filter(p => p.active === DisableStatus.Enabled);
+    const pdisBfiltered = this.plugs_dis_B.filter(p => p.active === DisableStatus.Enabled);
 
-  getMaximumTotal(): number {
-    const pmrrAfiltered = this.plugs_mrr_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pmrrBfiltered = this.plugs_mrr_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pdisAfiltered = this.plugs_dis_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pdisBfiltered = this.plugs_dis_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    let requirement = (num: number, goal: number) => num >= goal;
+    if (this.armorStatsEqual)
+      requirement = (num: number, goal: number) => num == goal;
 
-    let minA = Math.max(...pmrrAfiltered);
-    let minB = Math.max(...pmrrBfiltered);
-    let minC = Math.max(...pdisAfiltered);
-    let minD = Math.max(...pdisBfiltered);
-
-    return minA + minB + minC + minD;
-  }
-
-  public n= 0;
-
-  getProbabilityForTotal(total: number): number {
-    this.n++;
-    const pmrrAfiltered = this.plugs_mrr_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pmrrBfiltered = this.plugs_mrr_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pdisAfiltered = this.plugs_dis_A.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pdisBfiltered = this.plugs_dis_B.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-
-    let prob = 0;
-
+    // check MRR
+    let probMRR = 0;
     for (let i = 0; i < pmrrAfiltered.length; i++) {
       for (let j = 0; j < pmrrBfiltered.length; j++) {
-        for (let k = 0; k < pdisAfiltered.length; k++) {
-          for (let l = 0; l < pdisBfiltered.length; l++) {
-            if (pmrrAfiltered[i] + pmrrBfiltered[j] + pdisAfiltered[k] + pdisBfiltered[l] >= total) {
-              prob += 1;
-            }
-          }
-        }
+        if (!requirement(pmrrAfiltered[i].plug[0] + pmrrBfiltered[j].plug[0], this.desired_stats[0])) continue;
+        if (!requirement(pmrrAfiltered[i].plug[1] + pmrrBfiltered[j].plug[1], this.desired_stats[1])) continue;
+        if (!requirement(pmrrAfiltered[i].plug[2] + pmrrBfiltered[j].plug[2], this.desired_stats[2])) continue;
+        probMRR += 1;
       }
     }
-    return prob/(pmrrAfiltered.length * pmrrBfiltered.length * pdisAfiltered.length * pdisBfiltered.length);
-  }
+    probMRR /= pmrrAfiltered.length * pmrrBfiltered.length;
 
-
-  //--------------------------------------------------------------------------------------------------------------------
-  getMinimumTotalForTriplet(triplet: number): number {
-    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
-    if (triplet >= 1) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
-
-    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-
-    let minA = Math.min(...pAfiltered);
-    let minB = Math.min(...pBfiltered);
-    return minA + minB;
-  }
-
-  getMaximumTotalForTriplet(triplet: number): number {
-    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
-    if (triplet >= 1) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
-
-    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-
-    let minA = Math.max(...pAfiltered);
-    let minB = Math.max(...pBfiltered);
-    return minA + minB;
-  }
-
-
-  getProbabilityForTriplet(triplet: number, value: number): number {
-    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
-    if (triplet >= 1) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
-
-    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
-
-    // the result is the probability of the sum of two plugs being >= value
-    let prob = 0;
-
-    for (let i = 0; i < pAfiltered.length; i++) {
-      for (let j = 0; j < pBfiltered.length; j++) {
-        if (pAfiltered[i] + pBfiltered[j] >= value) {
-          prob += 1;
-        }
+    // check DIS
+    let probDIS = 0;
+    for (let i = 0; i < pdisAfiltered.length; i++) {
+      for (let j = 0; j < pdisBfiltered.length; j++) {
+        if (!requirement(pdisAfiltered[i].plug[0] + pdisBfiltered[j].plug[0], this.desired_stats[3])) continue;
+        if (!requirement(pdisAfiltered[i].plug[1] + pdisBfiltered[j].plug[1], this.desired_stats[4])) continue;
+        if (!requirement(pdisAfiltered[i].plug[2] + pdisBfiltered[j].plug[2], this.desired_stats[5])) continue;
+        probDIS += 1;
       }
     }
-    return prob / (pAfiltered.length * pBfiltered.length);
+    probDIS /= pdisAfiltered.length * pdisBfiltered.length;
+
+    return probMRR * probDIS;
   }
 
 
-  //--------------------------------------------------------------------------------------------------------------------
-
-  getMinimumForStat(stat: number): number {
-    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
-    if (stat > 2) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
-
-    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
-    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
-
-    let minA = Math.min(...pAfiltered);
-    let minB = Math.min(...pBfiltered);
-    return minA + minB;
-  }
-
-  getMaximumForStat(stat: number): number {
-    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
-    if (stat > 2) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
-
-    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
-    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
-
-    let minA = Math.max(...pAfiltered);
-    let minB = Math.max(...pBfiltered);
-
-    return minA + minB;
-  }
-
-  getProbabilityForStat(stat: number, value: number): number {
-    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
-    if (stat > 2) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
-
-    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
-    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
-
-    // the result is the probability of the sum of two plugs being >= value
-    let prob = 0;
-
-    for (let i = 0; i < pAfiltered.length; i++) {
-      for (let j = 0; j < pBfiltered.length; j++) {
-        if (pAfiltered[i] + pBfiltered[j] >= value) {
-          prob += 1;
-        }
-      }
-    }
-    return prob / (pAfiltered.length * pBfiltered.length);
-  }
+  //----------------------------------------------------------------------------------------------------
 
   getStatName(stat: number): string {
     return ["Mobility", "Resilience", "Recovery", "Discipline", "Intellect", "Strength"][stat]
@@ -290,5 +193,4 @@ export class AppComponent {
   get statList(): number[] {
     return [0, 1, 2, 3, 4, 5]
   }
-
 }

@@ -12,18 +12,21 @@ import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {VarDirectiveDirective} from "./directive/var-directive.directive";
+import {MatSliderModule} from "@angular/material/slider";
+import { PlugStatisticsOverviewComponent } from './components/plug-statistics-overview/plug-statistics-overview.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PlugTripletVisualiserComponent,
     PlugCombinationVisualiserComponent,
-    VarDirectiveDirective
+    VarDirectiveDirective,
+    PlugStatisticsOverviewComponent
   ],
   imports: [
     BrowserModule, BrowserAnimationsModule,
     FormsModule, MatRadioModule, MatCheckboxModule,
-    MatTooltipModule, MatCardModule, MatButtonToggleModule
+    MatTooltipModule, MatCardModule, MatButtonToggleModule, MatSliderModule
   ],
   providers: [],
   bootstrap: [AppComponent]

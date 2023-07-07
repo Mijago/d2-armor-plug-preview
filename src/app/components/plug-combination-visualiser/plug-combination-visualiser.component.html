@@ -22,8 +22,8 @@
               [@changePointColor]="pA.active || pB.active"
               [attr.cx]="mapPoint(pA.plug[0]+pB.plug[0], pA.plug[1]+pB.plug[1], pA.plug[2]+pB.plug[2]).x"
               [attr.cy]="mapPoint(pA.plug[0]+pB.plug[0], pA.plug[1]+pB.plug[1], pA.plug[2]+pB.plug[2]).y"
-              [attr.r]="0.75">
-              <!--matTooltip="{{names[0]}}: {{pA.plug[0]+pB.plug[0]}} - {{names[1]}}: {{pA.plug[1]+pB.plug[1]}} - {{names[2]}}: {{pA.plug[2]+pB.plug[2]}}"-->
+              [attr.r]="0.75"
+              matTooltip="{{names[0]}}: {{pA.plug[0]+pB.plug[0]}} - {{names[1]}}: {{pA.plug[1]+pB.plug[1]}} - {{names[2]}}: {{pA.plug[2]+pB.plug[2]}}"
       >
       </circle>
     </ng-container>

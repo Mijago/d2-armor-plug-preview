@@ -33,22 +33,3 @@ r {
   margin-bottom: 10px;
 }
 
-.percentage-table {
-  border-collapse: collapse;
-}
-.percentage-table > tr > :first-child {
-  font-weight: bold;
-  border-right: 1px solid black;
-  border-left: 1px solid black;
-}
-.percentage-table > tr > td,
-.percentage-table > tr > th
-{
-  padding-left: 5px;
-  padding-right: 5px;
-  border-right: 1px solid black;
-}
-
-.percentage-table > tr > td:not(:first-child) {
-  text-align: right;
-}

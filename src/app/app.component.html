@@ -33,6 +33,9 @@
 
 <mat-card>
   <mat-card-title>Plug Filters</mat-card-title>
+  <mat-card-subtitle>
+    Apply filters to the plug set. The filters are applied in the order they are listed here.
+  </mat-card-subtitle>
   <mat-card-content>
 
     <div class="config-grp-entry">
@@ -114,80 +117,48 @@
   <mat-card-title>
     Observations
   </mat-card-title>
+  <mat-card-subtitle>
+    The probabilities to get certain values for each stat, triplet and total.
+  </mat-card-subtitle>
+  <mat-card-content>
+    <app-plug-statistics-overview
+      #observationTable
+      [plugs_dis_A]="plugs_dis_A"
+      [plugs_dis_B]="plugs_dis_B"
+      [plugs_mrr_A]="plugs_mrr_A"
+      [plugs_mrr_B]="plugs_mrr_B"
+    ></app-plug-statistics-overview>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-title>
+    Armor probability
+  </mat-card-title>
+  <mat-card-subtitle>
+    Calculates the probability to get a roll.
+  </mat-card-subtitle>
   <mat-card-content>
 
-    <table class="percentage-table">
-      <tr>
-        <th>Stat</th>
-        <th>Min</th>
-        <th>Max</th>
-        <th>Prob >= 5</th>
-        <th>Prob >= 10</th>
-        <th>Prob >= 20</th>
-        <th>Prob >= 25</th>
-        <th>Prob == 30</th>
-      </tr>
+    <mat-button-toggle-group  [(ngModel)]="armorStatsEqual">
+      <mat-button-toggle [value]="false">Stats may be higher</mat-button-toggle>
+      <mat-button-toggle [value]="true">Stats must be exact</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <table>
       <tr *ngFor="let stat of statList">
-        <td>{{getStatName(stat)}}</td>
-        <td>{{getMinimumForStat(stat)}}</td>
-        <td>{{getMaximumForStat(stat)}}</td>
-        <td>{{getProbabilityForStat(stat, 5) | percent:"1.1-1" }}</td>
-        <td>{{getProbabilityForStat(stat, 10) | percent:"1.1-1" }}</td>
-        <td>{{getProbabilityForStat(stat, 20) | percent:"1.2-2" }}</td>
-        <td>{{getProbabilityForStat(stat, 25) | percent:"1.3-3" }}</td>
-        <td>{{getProbabilityForStat(stat, 30) | percent:"1.3-3" }}</td>
-      </tr>
-
-      <tr>
-        <th>Triplet</th>
-        <th>Min</th>
-        <th>Max</th>
-        <th>Prob >= 24</th>
-        <th>Prob >= 28</th>
-        <th>Prob >= 30</th>
-        <th>Prob >= 32</th>
-        <th>Prob == 34</th>
+        <td> {{getStatName(stat)}} </td>
+        <td>
+          <mat-slider class="example-margin"
+                      [max]="30" [min]="2"
+                      [step]="1" [thumbLabel]="true"
+                      [(ngModel)]="desired_stats[stat]"></mat-slider>
+          {{desired_stats[stat]}}
+        </td>
       </tr>
       <tr>
-        <td>M | R | R</td>
-        <td>{{getMinimumTotalForTriplet(0)}}</td>
-        <td>{{getMaximumTotalForTriplet(0)}}</td>
-        <td>{{getProbabilityForTriplet(0, 24) | percent:"1.1-1" }}</td>
-        <td>{{getProbabilityForTriplet(0, 28) | percent:"1.1-1" }}</td>
-        <td>{{getProbabilityForTriplet(0, 30) | percent:"1.2-2" }}</td>
-        <td>{{getProbabilityForTriplet(0, 32) | percent:"1.3-3" }}</td>
-        <td>{{getProbabilityForTriplet(0, 34) | percent:"1.3-3" }}</td>
-      </tr>
-      <tr>
-        <td>D | I | S</td>
-        <td>{{getMinimumTotalForTriplet(1)}}</td>
-        <td>{{getMaximumTotalForTriplet(1)}}</td>
-        <td>{{getProbabilityForTriplet(1, 24) | percent:"1.1-1" }}</td>
-        <td>{{getProbabilityForTriplet(1, 28) | percent:"1.1-1" }}</td>
-        <td>{{getProbabilityForTriplet(1, 30) | percent:"1.2-2" }}</td>
-        <td>{{getProbabilityForTriplet(1, 32) | percent:"1.3-3" }}</td>
-        <td>{{getProbabilityForTriplet(1, 34) | percent:"1.3-3" }}</td>
-      </tr>
-
-      <tr>
-        <th>Total</th>
-        <th>Min</th>
-        <th>Max</th>
-        <th>Prob >= 48</th>
-        <th>Prob >= 56</th>
-        <th>Prob >= 60</th>
-        <th>Prob >= 64</th>
-        <th>Prob == 68</th>
-      </tr>
-      <tr>
-        <td>Total</td>
-        <td>{{getMinimumTotal()}}</td>
-        <td>{{getMaximumTotal()}}</td>
-        <td>{{getProbabilityForTotal(48) | percent:"1.2-2" }}</td>
-        <td>{{getProbabilityForTotal(56) | percent:"1.2-2" }}</td>
-        <td>{{getProbabilityForTotal(60) | percent:"1.2-2" }}</td>
-        <td>{{getProbabilityForTotal(64) | percent:"1.3-3" }}</td>
-        <td>{{getProbabilityForTotal(68) | percent:"1.3-3" }}</td>
+        <td>Probability:</td>
+        <td>{{getArmorProbability() | percent:'1.5-7'}}</td>
       </tr>
     </table>
   </mat-card-content>
