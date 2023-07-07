@@ -134,4 +134,107 @@ export class AppComponent {
     return group == groupExotic || group == groupWarTable;
   }
 
+
+  getMinimumTotalForTriplet(triplet: number): number {
+    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
+    if (triplet >= 1) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
+
+    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+
+    let minA = Math.min(...pAfiltered);
+    let minB = Math.min(...pBfiltered);
+    return minA + minB;
+  }
+  getMaximumTotalForTriplet(triplet: number): number {
+    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
+    if (triplet >= 1) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
+
+    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+
+    let minA = Math.max(...pAfiltered);
+    let minB = Math.max(...pBfiltered);
+    return minA + minB;
+  }
+
+
+  getProbabilityForTriplet(triplet: number, value: number): number {
+    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
+    if (triplet >= 1) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
+
+    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug.reduce((a, b) => a + b, 0));
+
+    // the result is the probability of the sum of two plugs being >= value
+    let prob = 0;
+
+    for (let i = 0; i < pAfiltered.length; i++) {
+      for (let j = 0; j < pBfiltered.length; j++) {
+        if (pAfiltered[i] + pBfiltered[j] >= value) {
+          prob += 1 / (pAfiltered.length * pBfiltered.length);
+        }
+      }
+    }
+    return prob;
+
+  }
+
+
+  //--------------------------------------------------------------------------------------------------------------------
+
+  getMinimumForStat(stat: number): number {
+    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
+    if (stat > 2) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
+
+    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
+    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
+
+    let minA = Math.min(...pAfiltered);
+    let minB = Math.min(...pBfiltered);
+    return minA + minB;
+  }
+
+  getMaximumForStat(stat: number): number {
+    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
+    if (stat > 2) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
+
+    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
+    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
+
+    let minA = Math.max(...pAfiltered);
+    let minB = Math.max(...pBfiltered);
+
+    return minA + minB;
+  }
+
+  getProbabilityForStat(stat: number, value: number): number {
+    let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
+    if (stat > 2) pA = this.plugs_dis_A, pB = this.plugs_dis_B;
+
+    const pAfiltered = pA.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
+    const pBfiltered = pB.filter(p => p.active === DisableStatus.Enabled).map(p => p.plug[stat % 3]);
+
+    // the result is the probability of the sum of two plugs being >= value
+    let prob = 0;
+
+    for (let i = 0; i < pAfiltered.length; i++) {
+      for (let j = 0; j < pBfiltered.length; j++) {
+        if (pAfiltered[i] + pBfiltered[j] >= value) {
+          prob += 1 / (pAfiltered.length * pBfiltered.length);
+        }
+      }
+    }
+    return prob;
+
+  }
+
+  getStatName(stat: number): string {
+    return ["Mobility", "Resilience", "Recovery", "Discipline", "Intellect", "Strength"][stat]
+  }
+
+  get statList(): number[] {
+    return [0, 1, 2, 3, 4, 5]
+  }
+
 }
