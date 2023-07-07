@@ -18,3 +18,7 @@
 .percentage-table > tr > td:not(:first-child) {
   text-align: right;
 }
+
+.zero {
+  color: rgb(185, 46, 69);
+}
