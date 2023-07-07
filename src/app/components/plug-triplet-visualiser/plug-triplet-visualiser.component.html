@@ -1,0 +1,40 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="200px"
+  height="200px"
+  class="statview"
+  viewBox="0 0 100 100"
+>
+
+  <line [attr.x1]="50" [attr.y1]="60" [attr.x2]="mapPoint(32,0,0).x" [attr.y2]="mapPoint(32,0,0).y"
+        stroke="gray" stroke-width="0.6"></line>
+  <line [attr.x1]="50" [attr.y1]="60" [attr.x2]="mapPoint(0,32,0).x" [attr.y2]="mapPoint(0,32,0).y"
+        stroke="gray" stroke-width="0.6"></line>
+  <line [attr.x1]="50" [attr.y1]="60" [attr.x2]="mapPoint(0,0,32).x" [attr.y2]="mapPoint(0,0,32).y"
+        stroke="gray" stroke-width="0.6"></line>
+
+
+  <!-- create a circle for each entry in plugs -->
+  <circle
+    *ngFor="let p of activePlugs; let i = index"
+    [class.active]="p.active"
+    [@changePointColor]="p.active"
+    [attr.cx]="mapPoint(p.plug[0], p.plug[1], p.plug[2]).x"
+    [attr.cy]="mapPoint(p.plug[0], p.plug[1], p.plug[2]).y"
+    [attr.r]="1.5"
+    matTooltip="{{names[0]}}: {{p.plug[0]}} - {{names[1]}}: {{p.plug[1]}} - {{names[2]}}: {{p.plug[2]}}"
+  >
+
+  </circle>
+
+
+  <text x="58" y="5" text-anchor="middle" alignment-baseline="middle" font-size="8" fill="white">
+    {{names[2]}}
+  </text>
+  <text x="5" y="80" text-anchor="middle" alignment-baseline="middle" font-size="8" fill="white">
+    {{names[1]}}
+  </text>
+  <text x="92" y="80" text-anchor="middle" alignment-baseline="middle" font-size="8" fill="white">
+    {{names[0]}}
+  </text>
+</svg>
