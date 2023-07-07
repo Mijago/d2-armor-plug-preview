@@ -33,3 +33,7 @@ r {
   margin-bottom: 10px;
 }
 
+.impossible-warning {
+  color: red;
+  font-weight: bold;
+}

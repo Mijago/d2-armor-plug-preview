@@ -158,7 +158,12 @@
       </tr>
       <tr>
         <td>Probability:</td>
-        <td>{{getArmorProbability() | percent:'1.5-7'}}</td>
+        <td *ngVar="getArmorProbability() as prb">
+          {{prb | percent:'1.5-7'}}
+          <span *ngIf="prb == 0" class="impossible-warning">
+            impossible!
+          </span>
+        </td>
       </tr>
     </table>
   </mat-card-content>
