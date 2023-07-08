@@ -185,16 +185,66 @@
                         [(ngModel)]="desired_stats[stat]"></mat-slider>
           </td>
           <td class="armor-select-table-val divider triplet1">{{desired_stats[stat]  | number:"2.0-0"}}</td>
-          <td class="triplet2"> {{getStatName(stat+3)}} </td>
+          <td class="triplet2"> {{getStatName(stat + 3)}} </td>
           <td class="triplet2">
             <mat-slider class="example-margin"
                         [max]="30" [min]="2"
                         [step]="1" [thumbLabel]="true"
                         [(ngModel)]="desired_stats[stat+3]"></mat-slider>
           </td>
-          <td class="armor-select-table-val triplet2">{{desired_stats[stat+3] | number:"2.0-0"}}</td>
+          <td class="armor-select-table-val triplet2">{{desired_stats[stat + 3] | number:"2.0-0"}}</td>
         </tr>
       </table>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="break"></div>
+
+  <mat-card class="card">
+    <mat-card-title>
+      Explanation
+    </mat-card-title>
+    <mat-card-subtitle>
+      A short explanation of what is happening here.
+    </mat-card-subtitle>
+    <mat-card-content>
+      <img ngSrc="assets/explanation/explanation_hunterleg_dim.png" alt="Armor explanation" height="241" width="320">
+      <img ngSrc="assets/explanation/explanation_hunterleg_d2ap.png" alt="Armor explanation" height="490" width="321">
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="card">
+    <mat-card-title>
+      Plugs
+    </mat-card-title>
+    <mat-card-subtitle>
+      All available plugs used for the calculation.
+    </mat-card-subtitle>
+    <mat-card-content>
+
+      <div *ngFor="let lst of [plugs_mrr_A, plugs_mrr_B, plugs_dis_A, plugs_dis_B], let idx = index">
+        <b>
+          {{idx == 0 ? 'Mobility/Resilience/Recovery | Part 1'
+        : idx == 1 ? 'Mobility/Resilience/Recovery | Part 2'
+          : idx == 2 ? 'Discipline/Intellect/Strength | Part 1'
+            : 'Discipline/Intellect/Strength | Part 2' }}
+        </b>
+
+        <div class="plug-list-container">
+
+          <ng-container *ngFor="let mrrA of lst">
+            <div class="plug-entry" [class.disabled]="mrrA.active != 0">
+
+              <table class="plug-entry-table">
+                <tr>
+                  <td style="background-color: rgba(176,253,221, {{mrrA.plug[0]/15.0}})">{{mrrA.plug[0]}}</td>
+                  <td style="background-color: rgba(176,253,221, {{mrrA.plug[1]/15.0}})">{{mrrA.plug[1]}}</td>
+                  <td style="background-color: rgba(176,253,221, {{mrrA.plug[2]/15.0}})">{{mrrA.plug[2]}}</td>
+                </tr>
+              </table>
+            </div>
+          </ng-container>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

@@ -14,6 +14,7 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {VarDirectiveDirective} from "./directive/var-directive.directive";
 import {MatSliderModule} from "@angular/material/slider";
 import { PlugStatisticsOverviewComponent } from './components/plug-statistics-overview/plug-statistics-overview.component';
+import {NgOptimizedImage} from "@angular/common";
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { PlugStatisticsOverviewComponent } from './components/plug-statistics-ov
   imports: [
     BrowserModule, BrowserAnimationsModule,
     FormsModule, MatRadioModule, MatCheckboxModule,
-    MatTooltipModule, MatCardModule, MatButtonToggleModule, MatSliderModule
+    MatTooltipModule, MatCardModule, MatButtonToggleModule, MatSliderModule, NgOptimizedImage
   ],
   providers: [],
   bootstrap: [AppComponent]

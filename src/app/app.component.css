@@ -72,3 +72,41 @@ r {
 .armor-select-table-val.divider {
   border-right: 1px solid black;
 }
+
+
+.plug-list-container {
+  margin-bottom: 10px;
+}
+
+.plug-list-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  max-height: 200px;
+  overflow-y: scroll;
+}
+
+.plug-entry {
+  flex: 1;
+  min-width: 75px;
+  max-width: 75px;
+  margin: 2px 2px;
+}
+
+.plug-entry-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  text-align: center;
+}
+
+.plug-entry-table td {
+  border: 1px solid black;
+  width: 25px;
+}
+
+.plug-entry.disabled {
+  opacity: 0.4;
+}
+
