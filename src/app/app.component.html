@@ -1,170 +1,184 @@
-<app-plug-triplet-visualiser
-  [activePlugs]="plugs_mrr_A"
-  [names]="['mob','res', 'rec']"
-></app-plug-triplet-visualiser>
-<app-plug-triplet-visualiser
-  [activePlugs]="plugs_mrr_B"
-  [names]="['mob','res', 'rec']"
-></app-plug-triplet-visualiser>
-<app-plug-combination-visualiser
-  [activePlugsA]="plugs_mrr_A"
-  [activePlugsB]="plugs_mrr_B"
-  [names]="['mob','res', 'rec']"
-></app-plug-combination-visualiser>
+<div id="container">
+  <mat-card class="card">
+    <mat-card-title>Plug Set Preview</mat-card-title>
+    <mat-card-subtitle>
+      A visualisation of the available plugs. The plugs are grouped by their stat triplet.
+    </mat-card-subtitle>
+    <mat-card-content>
+      <app-plug-triplet-visualiser
+        [activePlugs]="plugs_mrr_A"
+        [names]="['mob','res', 'rec']"
+      ></app-plug-triplet-visualiser>
+      <app-plug-triplet-visualiser
+        [activePlugs]="plugs_mrr_B"
+        [names]="['mob','res', 'rec']"
+      ></app-plug-triplet-visualiser>
+      <app-plug-combination-visualiser
+        [activePlugsA]="plugs_mrr_A"
+        [activePlugsB]="plugs_mrr_B"
+        [names]="['mob','res', 'rec']"
+      ></app-plug-combination-visualiser>
 
-<br>
-<app-plug-triplet-visualiser
-  [activePlugs]="plugs_dis_A"
-  [names]="['dis','int', 'str']"
-></app-plug-triplet-visualiser>
-<app-plug-triplet-visualiser
-  [activePlugs]="plugs_dis_B"
-  [names]="['dis','int', 'str']"
-></app-plug-triplet-visualiser>
-<app-plug-combination-visualiser
-  [activePlugsA]="plugs_dis_A"
-  [activePlugsB]="plugs_dis_B"
-  [names]="['dis','int', 'str']"
-></app-plug-combination-visualiser>
-
-<br>
-<br>
-
-
-<mat-card>
-  <mat-card-title>Plug Filters</mat-card-title>
-  <mat-card-subtitle>
-    Apply filters to the plug set. The filters are applied in the order they are listed here.
-  </mat-card-subtitle>
-  <mat-card-content>
-
-    <div class="config-grp-entry">
-      <label id="radio-statbase">
-        <b>Armor Quality</b>
-        High Stat removes every plug with a sum less than 14.
-      </label>
       <br>
-      <mat-button-toggle-group aria-labelledby="radio-statbase" [(ngModel)]="filterHighStat" (change)="update()">
-        <mat-button-toggle [value]="0">Normal</mat-button-toggle>
-        <mat-button-toggle [value]="1">High Stat</mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-    <div class="config-grp-entry">
-      <label id="radio-wartable">
-        <b>Pit of Heresy and Season of Defiance Focus.</b>
-        The first plug must have 15 in the selected stat.
-        Note that PoH is also High Stat.
-      </label>
+      <app-plug-triplet-visualiser
+        [activePlugs]="plugs_dis_A"
+        [names]="['dis','int', 'str']"
+      ></app-plug-triplet-visualiser>
+      <app-plug-triplet-visualiser
+        [activePlugs]="plugs_dis_B"
+        [names]="['dis','int', 'str']"
+      ></app-plug-triplet-visualiser>
+      <app-plug-combination-visualiser
+        [activePlugsA]="plugs_dis_A"
+        [activePlugsB]="plugs_dis_B"
+        [names]="['dis','int', 'str']"
+      ></app-plug-combination-visualiser>
+
       <br>
 
-      <mat-button-toggle-group aria-labelledby="radio-wartable" [(ngModel)]="warTableFocus" (change)="update()">
-        <mat-button-toggle [value]="-1">None</mat-button-toggle>
-        <!--
-        <mat-button-toggle [value]="0" class="triplet1">Mobility</mat-button-toggle>
-        <mat-button-toggle [value]="1" class="triplet1">Resilience</mat-button-toggle>
-        <mat-button-toggle [value]="2" class="triplet1">Recovery</mat-button-toggle>
-        <mat-button-toggle [value]="3" class="triplet2">Discipline</mat-button-toggle>
-        <mat-button-toggle [value]="4" class="triplet2">Intellect</mat-button-toggle>
-        <mat-button-toggle [value]="5" class="triplet2">Strength</mat-button-toggle>
-        -->
-        <mat-button-toggle [value]="6">Any</mat-button-toggle>
+    </mat-card-content>
+  </mat-card>
+
+
+  <mat-card class="card">
+    <mat-card-title>Plug Filters</mat-card-title>
+    <mat-card-subtitle>
+      Apply filters to the plug set. The filters are applied in the order they are listed here.
+    </mat-card-subtitle>
+    <mat-card-content>
+
+      <div class="config-grp-entry">
+        <label id="radio-statbase">
+          <b>Armor Quality</b>
+          High Stat removes every plug with a sum less than 14.
+        </label>
+        <br>
+        <mat-button-toggle-group aria-labelledby="radio-statbase" [(ngModel)]="filterHighStat" (change)="update()">
+          <mat-button-toggle [value]="0">Normal</mat-button-toggle>
+          <mat-button-toggle [value]="1">High Stat</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+      <div class="config-grp-entry">
+        <label id="radio-wartable">
+          <b>Pit of Heresy and Season of Defiance Focus.</b>
+          The first plug must have 15 in the selected stat.
+          Note that PoH is also High Stat.
+        </label>
+        <br>
+
+        <mat-button-toggle-group aria-labelledby="radio-wartable" [(ngModel)]="warTableFocus" (change)="update()">
+          <mat-button-toggle [value]="-1">None</mat-button-toggle>
+          <!--
+          <mat-button-toggle [value]="0" class="triplet1">Mobility</mat-button-toggle>
+          <mat-button-toggle [value]="1" class="triplet1">Resilience</mat-button-toggle>
+          <mat-button-toggle [value]="2" class="triplet1">Recovery</mat-button-toggle>
+          <mat-button-toggle [value]="3" class="triplet2">Discipline</mat-button-toggle>
+          <mat-button-toggle [value]="4" class="triplet2">Intellect</mat-button-toggle>
+          <mat-button-toggle [value]="5" class="triplet2">Strength</mat-button-toggle>
+          -->
+          <mat-button-toggle [value]="6">Any</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+      <div class="config-grp-entry">
+        <label id="radio-exoticintrinsic">
+          <b>Exotic intrinsic</b> (overwrites ghost in same triplet).
+          The selected stat must be > 1 in every plug.
+        </label>
+        <br>
+        <mat-button-toggle-group aria-labelledby="radio-exoticintrinsic" [(ngModel)]="filterExoticIntrinsic"
+                                 (change)="update()">
+          <mat-button-toggle [value]="-1">None</mat-button-toggle>
+          <mat-button-toggle [value]="0" class="triplet1">Mobility</mat-button-toggle>
+          <mat-button-toggle [value]="1" class="triplet1">Resilience</mat-button-toggle>
+          <mat-button-toggle [value]="2" class="triplet1">Recovery</mat-button-toggle>
+          <mat-button-toggle [value]="3" class="triplet2">Discipline</mat-button-toggle>
+          <mat-button-toggle [value]="4" class="triplet2">Intellect</mat-button-toggle>
+          <mat-button-toggle [value]="5" class="triplet2">Strength</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+
+      <div class="config-grp-entry">
+        <label id="radio-ghostmod">
+          <b>Ghost Mod</b>.
+          The selected stat must be > 1 in every plug.</label>
+        <br>
+        <mat-button-toggle-group aria-labelledby="radio-ghostmod" [(ngModel)]="filterGhost" (change)="update()">
+          <mat-button-toggle [value]="-1">None</mat-button-toggle>
+          <mat-button-toggle [value]="0" class="triplet1" [disabled]="isGhostModDisabled(0)">Mobility
+          </mat-button-toggle>
+          <mat-button-toggle [value]="1" class="triplet1" [disabled]="isGhostModDisabled(1)">Resilience
+          </mat-button-toggle>
+          <mat-button-toggle [value]="2" class="triplet1" [disabled]="isGhostModDisabled(2)">Recovery
+          </mat-button-toggle>
+          <mat-button-toggle [value]="3" class="triplet2" [disabled]="isGhostModDisabled(3)">Discipline
+          </mat-button-toggle>
+          <mat-button-toggle [value]="4" class="triplet2" [disabled]="isGhostModDisabled(4)">Intellect
+          </mat-button-toggle>
+          <mat-button-toggle [value]="5" class="triplet2" [disabled]="isGhostModDisabled(5)">Strength
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+
+  <mat-card class="card">
+    <mat-card-title>
+      Observations
+    </mat-card-title>
+    <mat-card-subtitle>
+      The probabilities to get certain values for each stat, triplet and total.
+    </mat-card-subtitle>
+    <mat-card-content>
+      <app-plug-statistics-overview
+        #observationTable
+        [plugs_dis_A]="plugs_dis_A"
+        [plugs_dis_B]="plugs_dis_B"
+        [plugs_mrr_A]="plugs_mrr_A"
+        [plugs_mrr_B]="plugs_mrr_B"
+      ></app-plug-statistics-overview>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card class="card">
+    <mat-card-title>
+      Armor probability
+    </mat-card-title>
+    <mat-card-subtitle>
+      Calculates the probability to get a roll.
+    </mat-card-subtitle>
+    <mat-card-content>
+
+      <mat-button-toggle-group [(ngModel)]="armorStatsEqual">
+        <mat-button-toggle [value]="false">Stats may be higher</mat-button-toggle>
+        <mat-button-toggle [value]="true">Stats must be exact</mat-button-toggle>
       </mat-button-toggle-group>
-    </div>
 
-    <div class="config-grp-entry">
-      <label id="radio-exoticintrinsic">
-        <b>Exotic intrinsic</b> (overwrites ghost in same triplet).
-        The selected stat must be > 1 in every plug.
-      </label>
-      <br>
-      <mat-button-toggle-group aria-labelledby="radio-exoticintrinsic" [(ngModel)]="filterExoticIntrinsic"
-                               (change)="update()">
-        <mat-button-toggle [value]="-1">None</mat-button-toggle>
-        <mat-button-toggle [value]="0" class="triplet1">Mobility</mat-button-toggle>
-        <mat-button-toggle [value]="1" class="triplet1">Resilience</mat-button-toggle>
-        <mat-button-toggle [value]="2" class="triplet1">Recovery</mat-button-toggle>
-        <mat-button-toggle [value]="3" class="triplet2">Discipline</mat-button-toggle>
-        <mat-button-toggle [value]="4" class="triplet2">Intellect</mat-button-toggle>
-        <mat-button-toggle [value]="5" class="triplet2">Strength</mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-
-
-    <div class="config-grp-entry">
-      <label id="radio-ghostmod">
-        <b>Ghost Mod</b>.
-        The selected stat must be > 1 in every plug.</label>
-      <br>
-      <mat-button-toggle-group aria-labelledby="radio-ghostmod" [(ngModel)]="filterGhost" (change)="update()">
-        <mat-button-toggle [value]="-1">None</mat-button-toggle>
-        <mat-button-toggle [value]="0" class="triplet1" [disabled]="isGhostModDisabled(0)">Mobility</mat-button-toggle>
-        <mat-button-toggle [value]="1" class="triplet1" [disabled]="isGhostModDisabled(1)">Resilience
-        </mat-button-toggle>
-        <mat-button-toggle [value]="2" class="triplet1" [disabled]="isGhostModDisabled(2)">Recovery</mat-button-toggle>
-        <mat-button-toggle [value]="3" class="triplet2" [disabled]="isGhostModDisabled(3)">Discipline
-        </mat-button-toggle>
-        <mat-button-toggle [value]="4" class="triplet2" [disabled]="isGhostModDisabled(4)">Intellect</mat-button-toggle>
-        <mat-button-toggle [value]="5" class="triplet2" [disabled]="isGhostModDisabled(5)">Strength</mat-button-toggle>
-      </mat-button-toggle-group>
-
-    </div>
-  </mat-card-content>
-
-</mat-card>
-
-
-<mat-card>
-  <mat-card-title>
-    Observations
-  </mat-card-title>
-  <mat-card-subtitle>
-    The probabilities to get certain values for each stat, triplet and total.
-  </mat-card-subtitle>
-  <mat-card-content>
-    <app-plug-statistics-overview
-      #observationTable
-      [plugs_dis_A]="plugs_dis_A"
-      [plugs_dis_B]="plugs_dis_B"
-      [plugs_mrr_A]="plugs_mrr_A"
-      [plugs_mrr_B]="plugs_mrr_B"
-    ></app-plug-statistics-overview>
-  </mat-card-content>
-</mat-card>
-
-<mat-card>
-  <mat-card-title>
-    Armor probability
-  </mat-card-title>
-  <mat-card-subtitle>
-    Calculates the probability to get a roll.
-  </mat-card-subtitle>
-  <mat-card-content>
-
-    <mat-button-toggle-group  [(ngModel)]="armorStatsEqual">
-      <mat-button-toggle [value]="false">Stats may be higher</mat-button-toggle>
-      <mat-button-toggle [value]="true">Stats must be exact</mat-button-toggle>
-    </mat-button-toggle-group>
-
-    <table>
-      <tr *ngFor="let stat of statList">
-        <td> {{getStatName(stat)}} </td>
-        <td>
-          <mat-slider class="example-margin"
-                      [max]="30" [min]="2"
-                      [step]="1" [thumbLabel]="true"
-                      [(ngModel)]="desired_stats[stat]"></mat-slider>
-          {{desired_stats[stat]}}
-        </td>
-      </tr>
-      <tr>
-        <td>Probability:</td>
-        <td *ngVar="getArmorProbability() as prb">
-          {{prb | percent:'1.5-7'}}
-          <span *ngIf="prb == 0" class="impossible-warning">
+      <table>
+        <tr *ngFor="let stat of statList">
+          <td> {{getStatName(stat)}} </td>
+          <td>
+            <mat-slider class="example-margin"
+                        [max]="30" [min]="2"
+                        [step]="1" [thumbLabel]="true"
+                        [(ngModel)]="desired_stats[stat]"></mat-slider>
+            {{desired_stats[stat]}}
+          </td>
+        </tr>
+        <tr>
+          <td>Probability:</td>
+          <td *ngVar="getArmorProbability() as prb">
+            {{prb | percent:'1.5-7'}}
+            <span *ngIf="prb == 0" class="impossible-warning">
             impossible!
           </span>
-        </td>
-      </tr>
-    </table>
-  </mat-card-content>
-</mat-card>
+          </td>
+        </tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+</div>
