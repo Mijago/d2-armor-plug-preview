@@ -125,6 +125,7 @@
 
   </mat-card>
 
+  <div class="break"></div>
 
   <mat-card class="card">
     <mat-card-title>
@@ -157,18 +158,9 @@
         <mat-button-toggle [value]="false">Stats may be higher</mat-button-toggle>
         <mat-button-toggle [value]="true">Stats must be exact</mat-button-toggle>
       </mat-button-toggle-group>
+      <br>
 
-      <table>
-        <tr *ngFor="let stat of statList">
-          <td> {{getStatName(stat)}} </td>
-          <td>
-            <mat-slider class="example-margin"
-                        [max]="30" [min]="2"
-                        [step]="1" [thumbLabel]="true"
-                        [(ngModel)]="desired_stats[stat]"></mat-slider>
-            {{desired_stats[stat]}}
-          </td>
-        </tr>
+      <table class="armor-select-table">
         <tr>
           <td>Probability:</td>
           <td *ngVar="getArmorProbability() as prb">
@@ -177,6 +169,30 @@
             impossible!
           </span>
           </td>
+        </tr>
+        <tr>
+          <th>Stat</th>
+          <th colspan="2">Desired Value</th>
+          <th>Stat</th>
+          <th colspan="2">Desired Value</th>
+        </tr>
+        <tr *ngFor="let stat of statList">
+          <td class="triplet1"> {{getStatName(stat)}} </td>
+          <td class="triplet1">
+            <mat-slider class="example-margin"
+                        [max]="30" [min]="2"
+                        [step]="1" [thumbLabel]="true"
+                        [(ngModel)]="desired_stats[stat]"></mat-slider>
+          </td>
+          <td class="armor-select-table-val divider triplet1">{{desired_stats[stat]  | number:"2.0-0"}}</td>
+          <td class="triplet2"> {{getStatName(stat+3)}} </td>
+          <td class="triplet2">
+            <mat-slider class="example-margin"
+                        [max]="30" [min]="2"
+                        [step]="1" [thumbLabel]="true"
+                        [(ngModel)]="desired_stats[stat+3]"></mat-slider>
+          </td>
+          <td class="armor-select-table-val triplet2">{{desired_stats[stat+3] | number:"2.0-0"}}</td>
         </tr>
       </table>
     </mat-card-content>

@@ -130,6 +130,7 @@ export class PlugStatisticsOverviewComponent implements OnInit {
 
 
   //--------------------------------------------------------------------------------------------------------------------
+  target_stat_value: number = 2;
 
   getMinimumForStat(stat: number): number {
     let pA = this.plugs_mrr_A, pB = this.plugs_mrr_B;
