@@ -4,9 +4,16 @@ import {
   PlugStatisticsOverviewComponent
 } from "./components/plug-statistics-overview/plug-statistics-overview.component";
 
+export enum PlugSource {
+  MediumRoll,
+  // PoH
+  SpikedRoll
+}
+
 export interface BasicPlugEntry {
   plug: [number, number, number];
   active: DisableStatus;
+  source: PlugSource;
 }
 
 export enum DisableStatus {
@@ -34,17 +41,29 @@ export class AppComponent {
 
   constructor(public changeRef: ChangeDetectorRef) {
     this.plugs_mrr_A = Plugs.map(plug => {
-      return {plug: plug, active: DisableStatus.Enabled,} as BasicPlugEntry
+      return {plug: plug, active: DisableStatus.Enabled, source: PlugSource.MediumRoll} as BasicPlugEntry
     })
     this.plugs_mrr_B = Plugs.map(plug => {
-      return {plug: plug, active: DisableStatus.Enabled,} as BasicPlugEntry
+      return {plug: plug, active: DisableStatus.Enabled, source: PlugSource.MediumRoll} as BasicPlugEntry
     });
     this.plugs_dis_A = Plugs.map(plug => {
-      return {plug: plug, active: DisableStatus.Enabled,} as BasicPlugEntry
+      return {plug: plug, active: DisableStatus.Enabled, source: PlugSource.MediumRoll} as BasicPlugEntry
     });
     this.plugs_dis_B = Plugs.map(plug => {
-      return {plug: plug, active: DisableStatus.Enabled,} as BasicPlugEntry
+      return {plug: plug, active: DisableStatus.Enabled, source: PlugSource.MediumRoll} as BasicPlugEntry
     });
+
+
+    // SPIKED (poh, focus)
+    // add [1, 1, 11], [1, 11, 1], [11, 1, 1] to _B
+    let spikedPlugs = [[1, 1, 11], [1, 11, 1], [11, 1, 1]];
+    this.plugs_mrr_B = this.plugs_mrr_B.concat(spikedPlugs.map(plug => {
+      return {plug: plug, active: DisableStatus.PitOfHeresy, source: PlugSource.SpikedRoll} as BasicPlugEntry
+    }));
+    this.plugs_dis_B = this.plugs_dis_B.concat(spikedPlugs.map(plug => {
+      return {plug: plug, active: DisableStatus.PitOfHeresy, source: PlugSource.SpikedRoll} as BasicPlugEntry
+    }));
+
   }
 
 
@@ -55,10 +74,10 @@ export class AppComponent {
   warTableFocus: number = -1;
   desired_stats: number[] = [2, 2, 2, 2, 2, 2];
 
-  filter(type: DisableStatus, targets: BasicPlugEntry[][], ft: (c: BasicPlugEntry) => boolean) {
+  filter(type: DisableStatus, targets: BasicPlugEntry[][], ft: (c: BasicPlugEntry) => boolean, onlyEnabled: boolean = true) {
     for (let target of targets) {
       target
-        .filter(p => p.active === DisableStatus.Enabled)
+        .filter(p => !onlyEnabled || p.active === DisableStatus.Enabled)
         .filter(ft)
         .forEach((p: BasicPlugEntry) => {
           p.active = type;
@@ -81,8 +100,8 @@ export class AppComponent {
         (p: BasicPlugEntry) => p.plug[0] + p.plug[1] + p.plug[2] < 14);
     }
 
-
     if (this.warTableFocus == 6) {
+
       this.filter(
         DisableStatus.PitOfHeresy,
         [this.plugs_mrr_A, this.plugs_dis_A],
@@ -91,16 +110,12 @@ export class AppComponent {
           || (p.plug[0] == 15 && p.plug[1] == 1 && p.plug[2] == 1)
           || (p.plug[0] == 1 && p.plug[1] == 15 && p.plug[2] == 1)
         ),);
-    } else if (this.warTableFocus > -1 && this.warTableFocus < 3) {
+
+    } else {
       this.filter(
         DisableStatus.WartableFocus,
-        [this.plugs_mrr_A],
-        (p: BasicPlugEntry) => p.plug[this.warTableFocus] != 15);
-    } else if (this.warTableFocus > 2 && this.warTableFocus < 6) {
-      this.filter(
-        DisableStatus.WartableFocus,
-        [this.plugs_dis_A],
-        (p: BasicPlugEntry) => p.plug[this.warTableFocus - 3] != 15);
+        [this.plugs_mrr_B, this.plugs_dis_B],
+        (p: BasicPlugEntry) => p.source == PlugSource.SpikedRoll,);
     }
 
     if (this.filterExoticIntrinsic > -1 && this.filterExoticIntrinsic < 3) {
